@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "706429499892",
+    "project_id": "jutta-ghar",
+    "storage_bucket": "jutta-ghar.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:706429499892:android:add2c17e57d257f79321a1",
+        "android_client_info": {
+          "package_name": "com.example.jutta_ghar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "706429499892-34hk15nt0dj5b9a3h0lgghnn4qjo7ja8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADwj_v08UkMh6iM5zW7iWT2Ltaoc_XeRE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "706429499892-34hk15nt0dj5b9a3h0lgghnn4qjo7ja8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
