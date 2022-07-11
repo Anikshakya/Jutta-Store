@@ -25,6 +25,7 @@ class AdminUploadPage extends StatefulWidget {
 }
 
 class _AdminUploadPageState extends State<AdminUploadPage> {
+  var dropDownValue = "Offer";
   @override
   void initState() {
     brandStoreController.text = widget.brandUploadName;
@@ -122,50 +123,86 @@ class _AdminUploadPageState extends State<AdminUploadPage> {
                   } else {
                     List<QueryDocumentSnapshot<Object?>> firestoreItems =
                         snapshot.data!.docs;
-                    return firestoreItems[0]["admin_role"] == "SuperAdmin"
+                    return firestoreItems[0]["admin_role"] == "superAdmin"
                         ? Column(
                             children: [
                               TextField(
+                                autofocus: true,
+                                textInputAction: TextInputAction.next,
                                 decoration: const InputDecoration(
                                   labelText: "Product Name",
                                 ),
                                 controller: nameController,
                               ),
                               TextField(
+                                textInputAction: TextInputAction.next,
                                 decoration: const InputDecoration(
                                   labelText: "Brand/Store Name",
                                 ),
                                 controller: brandStoreController,
                               ),
                               TextField(
+                                textInputAction: TextInputAction.next,
                                 decoration: const InputDecoration(
                                   labelText: "Description",
                                 ),
                                 controller: descriptionController,
                               ),
                               TextField(
+                                textInputAction: TextInputAction.next,
                                 decoration: const InputDecoration(
                                   labelText: "Category",
                                 ),
                                 controller: categoryController,
                               ),
                               TextField(
+                                textInputAction: TextInputAction.next,
+                                keyboardType: TextInputType.number,
                                 decoration: const InputDecoration(
                                   labelText: "Price",
                                 ),
                                 controller: priceController,
                               ),
                               TextField(
+                                keyboardType: TextInputType.number,
                                 decoration: const InputDecoration(
                                   labelText: "Discount",
                                 ),
                                 controller: discountController,
+                              ),
+                              DropdownButton<String>(
+                                value: dropDownValue,
+                                icon: const Icon(Icons.arrow_downward),
+                                elevation: 16,
+                                style:
+                                    const TextStyle(color: Colors.deepPurple),
+                                underline: Container(
+                                  height: 2,
+                                  color: Colors.deepPurpleAccent,
+                                ),
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    dropDownValue = newValue!;
+                                  });
+                                },
+                                items: <String>[
+                                  'Offer',
+                                  'Yes',
+                                  'No'
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
                               ),
                             ],
                           )
                         : Column(
                             children: [
                               TextField(
+                                autofocus: true,
+                                textInputAction: TextInputAction.next,
                                 decoration: const InputDecoration(
                                   labelText: "Product Name",
                                 ),
@@ -179,28 +216,59 @@ class _AdminUploadPageState extends State<AdminUploadPage> {
                                 controller: brandStoreController,
                               ),
                               TextField(
+                                textInputAction: TextInputAction.next,
                                 decoration: const InputDecoration(
                                   labelText: "Description",
                                 ),
                                 controller: descriptionController,
                               ),
                               TextField(
+                                textInputAction: TextInputAction.next,
                                 decoration: const InputDecoration(
                                   labelText: "Category",
                                 ),
                                 controller: categoryController,
                               ),
                               TextField(
+                                textInputAction: TextInputAction.next,
+                                keyboardType: TextInputType.number,
                                 decoration: const InputDecoration(
                                   labelText: "Price",
                                 ),
                                 controller: priceController,
                               ),
                               TextField(
+                                keyboardType: TextInputType.number,
                                 decoration: const InputDecoration(
                                   labelText: "Discount",
                                 ),
                                 controller: discountController,
+                              ),
+                              DropdownButton<String>(
+                                value: dropDownValue,
+                                icon: const Icon(Icons.arrow_downward),
+                                elevation: 16,
+                                style:
+                                    const TextStyle(color: Colors.deepPurple),
+                                underline: Container(
+                                  height: 2,
+                                  color: Colors.deepPurpleAccent,
+                                ),
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    dropDownValue = newValue!;
+                                  });
+                                },
+                                items: <String>[
+                                  'Offer',
+                                  'Yes',
+                                  'No'
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
                               ),
                             ],
                           );
@@ -266,6 +334,7 @@ class _AdminUploadPageState extends State<AdminUploadPage> {
           'discount': discountController.text.trim(),
           'price': priceController.text.trim(),
           'productID': docId.trim(),
+          'offer': dropDownValue.trim(),
         };
         await documentReferencer
             .set(data)
@@ -307,6 +376,7 @@ class _AdminUploadPageState extends State<AdminUploadPage> {
               'discount': discountController.text.trim(),
               'price': priceController.text.trim(),
               'productID': docId.trim(),
+              'offer': dropDownValue.trim(),
             };
             await documentReferencer
                 .set(data)

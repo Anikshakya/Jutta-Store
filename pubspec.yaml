@@ -63,6 +63,16 @@ dev_dependencies:
   #image-picker
   image_picker: ^0.8.5+3
 
+  #cached network image
+  cached_network_image: ^3.2.0
+
+  #location
+  geolocator: ^8.2.1
+  geocoding: ^2.0.4
+
+  #Camera
+  camera: ^0.9.8+1
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

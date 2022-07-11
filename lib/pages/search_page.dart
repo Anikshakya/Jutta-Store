@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:jutta_ghar/pages/admin_edit_page.dart';
-import 'package:jutta_ghar/pages/admin_upload_page.dart';
+import 'package:jutta_ghar/pages/order_page.dart';
 import 'package:jutta_ghar/tiles/admin_product_tiles.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:jutta_ghar/tiles/products_tiles.dart';
 
-class AdminViewPage extends StatefulWidget {
-  const AdminViewPage({
-    Key? key,
-  }) : super(key: key);
+class SearchPage extends StatefulWidget {
+  const SearchPage({Key? key}) : super(key: key);
 
   @override
-  State<AdminViewPage> createState() => _AdminViewPageState();
+  State<SearchPage> createState() => _SearchPageState();
 }
 
-class _AdminViewPageState extends State<AdminViewPage> {
+class _SearchPageState extends State<SearchPage> {
   final user = FirebaseAuth.instance.currentUser;
   var searchKey = "";
   final clearSearchController = TextEditingController();
@@ -73,8 +71,8 @@ class _AdminViewPageState extends State<AdminViewPage> {
                 stream: (searchKey != "")
                     ? FirebaseFirestore.instance
                         .collection('products')
-                        .where("brand_store", isGreaterThanOrEqualTo: searchKey)
-                        .where("brand_store", isLessThan: searchKey + 'z')
+                        .where("productName", isGreaterThanOrEqualTo: searchKey)
+                        .where("productName", isLessThan: searchKey + 'z')
                         .snapshots()
                     : FirebaseFirestore.instance
                         .collection("products")
@@ -88,33 +86,25 @@ class _AdminViewPageState extends State<AdminViewPage> {
                   } else {
                     List<QueryDocumentSnapshot<Object?>> firestoreItems =
                         snapshot.data!.docs;
-
                     return Wrap(
                       children: List.generate(
                         firestoreItems.length,
-                        (index) => AdminViewProductTile(
+                        (index) => ProductTile(
                           name: firestoreItems[index]["productName"],
                           description: firestoreItems[index]["description"],
                           discount:
                               firestoreItems[index]["discount"].toString(),
                           price: firestoreItems[index]["price"].toString(),
                           image: firestoreItems[index]["image"],
-                          offer: firestoreItems[index]["offer"],
                           ontap: () {
                             Get.to(
-                              () => AdminEditPage(
-                                productID: firestoreItems[index]["productID"],
-                                brand_store_name: firestoreItems[index]
-                                    ["brand_store"],
-                                name: firestoreItems[index]["productName"],
-                                description: firestoreItems[index]
-                                    ["description"],
-                                discount: firestoreItems[index]["discount"]
+                              () => OrderPage(
+                                url: firestoreItems[index]['image'],
+                                price: firestoreItems[index]['price'],
+                                title: firestoreItems[index]['productName'],
+                                desc: firestoreItems[index]['description'],
+                                discount: firestoreItems[index]['discount']
                                     .toString(),
-                                price:
-                                    firestoreItems[index]["price"].toString(),
-                                image: firestoreItems[index]["image"],
-                                category: firestoreItems[index]["category"],
                               ),
                             );
                           },
@@ -123,19 +113,6 @@ class _AdminViewPageState extends State<AdminViewPage> {
                     );
                   }
                 },
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Padding(
-                padding: const EdgeInsets.all(25),
-                child: FloatingActionButton(
-                    onPressed: () {
-                      Get.to(() => const AdminUploadPage(
-                            brandUploadName: "",
-                          ));
-                    },
-                    child: const Icon(Icons.add)),
               ),
             ),
           ],

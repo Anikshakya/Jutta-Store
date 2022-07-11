@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:jutta_ghar/pages/user_edit_page.dart';
-import 'package:jutta_ghar/tiles/superadmin_user_tile..dart';
+import 'package:jutta_ghar/tiles/superadmin_user_tile.dart';
 
 class SuperAdminUserViewPage extends StatefulWidget {
   const SuperAdminUserViewPage({Key? key}) : super(key: key);

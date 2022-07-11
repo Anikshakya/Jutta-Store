@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jutta_ghar/pages/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
+import 'package:jutta_ghar/pages/splash_screen.dart';
 import 'package:jutta_ghar/utils/utils.dart';
 
 void main() async {
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const LoginPage(),
+      home: const SplashScreen(),
     );
   }
 }

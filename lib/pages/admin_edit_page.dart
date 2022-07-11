@@ -18,24 +18,30 @@ class AdminEditPage extends StatefulWidget {
       name,
       category,
       brand_store_name,
+      offer,
       productID;
-  const AdminEditPage(
-      {Key? key,
-      this.brand_store_name,
-      this.image,
-      this.description,
-      this.price,
-      this.discount,
-      this.name,
-      this.category,
-      this.productID})
-      : super(key: key);
+
+  const AdminEditPage({
+    Key? key,
+    this.brand_store_name,
+    this.image,
+    this.description,
+    this.price,
+    this.discount,
+    this.name,
+    this.category,
+    this.productID,
+    this.offer,
+  }) : super(key: key);
 
   @override
   State<AdminEditPage> createState() => _AdminEditPageState();
 }
 
 class _AdminEditPageState extends State<AdminEditPage> {
+  var dropDownValue = "Offer";
+  final user = FirebaseAuth.instance.currentUser;
+
   @override
   void initState() {
     brandStoreController.text = widget.brand_store_name;
@@ -44,10 +50,9 @@ class _AdminEditPageState extends State<AdminEditPage> {
     priceController.text = widget.price;
     discountController.text = widget.discount;
     categoryController.text = widget.category;
+
     super.initState();
   }
-
-  final user = FirebaseAuth.instance.currentUser;
 
   //text controller
   final brandStoreController = TextEditingController();
@@ -125,7 +130,7 @@ class _AdminEditPageState extends State<AdminEditPage> {
                   } else {
                     List<QueryDocumentSnapshot<Object?>> firestoreItems =
                         snapshot.data!.docs;
-                    return firestoreItems[0]["admin_role"] == "SuperAdmin"
+                    return firestoreItems[0]["admin_role"] == "superAdmin"
                         ? Column(
                             children: [
                               TextField(
@@ -153,16 +158,47 @@ class _AdminEditPageState extends State<AdminEditPage> {
                                 controller: categoryController,
                               ),
                               TextField(
+                                keyboardType: TextInputType.number,
                                 decoration: const InputDecoration(
                                   labelText: "Price",
                                 ),
                                 controller: priceController,
                               ),
                               TextField(
+                                keyboardType: TextInputType.number,
                                 decoration: const InputDecoration(
                                   labelText: "Discount",
                                 ),
                                 controller: discountController,
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              DropdownButton<String>(
+                                value: dropDownValue,
+                                icon: const Icon(Icons.arrow_downward),
+                                elevation: 16,
+                                style:
+                                    const TextStyle(color: Colors.deepPurple),
+                                underline: Container(
+                                  height: 2,
+                                  color: Colors.deepPurpleAccent,
+                                ),
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    dropDownValue = newValue!;
+                                  });
+                                },
+                                items: <String>[
+                                  'Offer',
+                                  'Yes',
+                                  'No'
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
                               ),
                             ],
                           )
@@ -194,22 +230,60 @@ class _AdminEditPageState extends State<AdminEditPage> {
                                 controller: categoryController,
                               ),
                               TextField(
+                                keyboardType: TextInputType.number,
                                 decoration: const InputDecoration(
                                   labelText: "Price",
                                 ),
                                 controller: priceController,
                               ),
                               TextField(
+                                keyboardType: TextInputType.number,
                                 decoration: const InputDecoration(
                                   labelText: "Discount",
                                 ),
                                 controller: discountController,
+                              ),
+                              DropdownButton<String>(
+                                value: dropDownValue,
+                                icon: const Icon(Icons.arrow_downward),
+                                elevation: 16,
+                                style:
+                                    const TextStyle(color: Colors.deepPurple),
+                                underline: Container(
+                                  height: 2,
+                                  color: Colors.deepPurpleAccent,
+                                ),
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    dropDownValue = newValue!;
+                                  });
+                                },
+                                items: <String>[
+                                  'Offer',
+                                  'Yes',
+                                  'No'
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
                               ),
                             ],
                           );
                   }
                 },
               ),
+              const SizedBox(
+                height: 20,
+              ),
+              dropDownValue == "Yes"
+                  ? Container(
+                      height: 50,
+                      width: 50,
+                      color: Colors.green,
+                    )
+                  : const SizedBox(),
               const SizedBox(
                 height: 20,
               ),
@@ -261,11 +335,13 @@ class _AdminEditPageState extends State<AdminEditPage> {
             .collection("products")
             .doc(widget.productID);
         Map<String, dynamic> data = {
+          'productName': nameController.text.trim(),
           'brand_store': brandStoreController.text.trim(),
           'category': categoryController.text.trim(),
           'description': descriptionController.text.trim(),
           'discount': discountController.text.trim(),
           'price': priceController.text.trim(),
+          'offer': dropDownValue.trim(),
         };
         await documentReferencer
             .update(data)
@@ -309,6 +385,7 @@ class _AdminEditPageState extends State<AdminEditPage> {
                 'description': descriptionController.text.trim(),
                 'discount': discountController.text.trim(),
                 'price': priceController.text.trim(),
+                'offer': dropDownValue.trim(),
               };
               await documentReferencer
                   .update(data)
