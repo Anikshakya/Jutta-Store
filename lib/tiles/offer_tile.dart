@@ -1,41 +1,36 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
 
-class ProductTile extends StatefulWidget {
+class OfferTile extends StatefulWidget {
   final image, description, price, discount, name;
   final VoidCallback? ontap;
-
-  const ProductTile({
-    Key? key,
-    this.image,
-    this.description,
-    this.price,
-    this.discount,
-    this.name,
-    this.ontap,
-  }) : super(key: key);
+  const OfferTile(
+      {Key? key,
+      this.image,
+      this.description,
+      this.price,
+      this.discount,
+      this.name,
+      this.ontap})
+      : super(key: key);
 
   @override
-  State<ProductTile> createState() => _ProductTileState();
+  State<OfferTile> createState() => _OfferTileState();
 }
 
-class _ProductTileState extends State<ProductTile> {
+class _OfferTileState extends State<OfferTile> {
   bool fav = false;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: widget.ontap,
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.46,
-        margin: const EdgeInsets.only(
-          top: 5,
-          bottom: 5,
-          left: 4,
-          right: 4,
-        ),
-        padding: const EdgeInsets.only(bottom: 15),
+        width: MediaQuery.of(context).size.width * 0.64,
+        margin: const EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 5),
+        padding: const EdgeInsets.only(bottom: 10),
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -54,6 +49,7 @@ class _ProductTileState extends State<ProductTile> {
               children: [
                 CachedNetworkImage(
                   imageUrl: widget.image,
+                  height: 135,
                   width: double.infinity,
                   fit: BoxFit.cover,
                 ),

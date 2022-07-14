@@ -73,6 +73,20 @@ dev_dependencies:
   #Camera
   camera: ^0.9.8+1
 
+  #Sticky-Header
+  sticky_headers: ^0.2.0
+
+  #Url_Launcher
+  url_launcher: ^6.1.5
+
+  #Font-awesome
+  font_awesome_flutter: ^10.1.0
+
+  #Carsouel Slider
+  flutter_carousel_slider: ^1.0.8
+  smooth_page_indicator: ^1.0.0+2
+
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

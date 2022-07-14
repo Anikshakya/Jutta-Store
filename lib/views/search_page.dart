@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jutta_ghar/pages/order_page.dart';
-import 'package:jutta_ghar/tiles/admin_product_tiles.dart';
+import 'package:jutta_ghar/views/order_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -86,28 +85,39 @@ class _SearchPageState extends State<SearchPage> {
                   } else {
                     List<QueryDocumentSnapshot<Object?>> firestoreItems =
                         snapshot.data!.docs;
-                    return Wrap(
-                      children: List.generate(
-                        firestoreItems.length,
-                        (index) => ProductTile(
-                          name: firestoreItems[index]["productName"],
-                          description: firestoreItems[index]["description"],
-                          discount:
-                              firestoreItems[index]["discount"].toString(),
-                          price: firestoreItems[index]["price"].toString(),
-                          image: firestoreItems[index]["image"],
-                          ontap: () {
-                            Get.to(
-                              () => OrderPage(
-                                url: firestoreItems[index]['image'],
-                                price: firestoreItems[index]['price'],
-                                title: firestoreItems[index]['productName'],
-                                desc: firestoreItems[index]['description'],
-                                discount: firestoreItems[index]['discount']
-                                    .toString(),
-                              ),
-                            );
-                          },
+                    return SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: Wrap(
+                        alignment: WrapAlignment.spaceEvenly,
+                        children: List.generate(
+                          firestoreItems.length,
+                          (index) => ProductTile(
+                            name: firestoreItems[index]["productName"],
+                            description: firestoreItems[index]["description"],
+                            discount:
+                                firestoreItems[index]["discount"].toString(),
+                            price: firestoreItems[index]["price"].toString(),
+                            image: firestoreItems[index]["image"],
+                            ontap: () {
+                              Get.to(
+                                () => OrderPage(
+                                  image: firestoreItems[index]['image'],
+                                  price: firestoreItems[index]['price'],
+                                  name: firestoreItems[index]['productName'],
+                                  brand: firestoreItems[index]['brand_store']
+                                      .toUpperCase(),
+                                  description: firestoreItems[index]
+                                      ["description"],
+                                  discount: firestoreItems[index]['discount']
+                                      .toString(),
+                                  category: firestoreItems[index]['category'],
+                                  offer: firestoreItems[index]['offer'],
+                                  productID: firestoreItems[index]['productID'],
+                                  type: firestoreItems[index]['type'],
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     );

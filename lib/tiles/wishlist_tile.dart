@@ -2,39 +2,51 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ProductTile extends StatefulWidget {
-  final image, description, price, discount, name;
+class WishlistTile extends StatefulWidget {
+  final image,
+      description,
+      price,
+      discount,
+      name,
+      productID,
+      type,
+      offer,
+      category,
+      brand;
   final VoidCallback? ontap;
 
-  const ProductTile({
-    Key? key,
-    this.image,
-    this.description,
-    this.price,
-    this.discount,
-    this.name,
-    this.ontap,
-  }) : super(key: key);
+  const WishlistTile(
+      {Key? key,
+      this.image,
+      this.description,
+      this.price,
+      this.discount,
+      this.name,
+      this.ontap,
+      this.productID,
+      this.type,
+      this.offer,
+      this.category,
+      this.brand})
+      : super(key: key);
 
   @override
-  State<ProductTile> createState() => _ProductTileState();
+  State<WishlistTile> createState() => _WishlistTileState();
 }
 
-class _ProductTileState extends State<ProductTile> {
-  bool fav = false;
+class _WishlistTileState extends State<WishlistTile> {
+  //current user
+  final user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: widget.ontap,
       child: Container(
         width: MediaQuery.of(context).size.width * 0.46,
-        margin: const EdgeInsets.only(
-          top: 5,
-          bottom: 5,
-          left: 4,
-          right: 4,
-        ),
+        margin: const EdgeInsets.all(5),
         padding: const EdgeInsets.only(bottom: 15),
         decoration: const BoxDecoration(
           color: Colors.white,
@@ -54,77 +66,57 @@ class _ProductTileState extends State<ProductTile> {
               children: [
                 CachedNetworkImage(
                   imageUrl: widget.image,
+                  height: MediaQuery.of(context).size.width * 0.48,
                   width: double.infinity,
                   fit: BoxFit.cover,
                 ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        fav = !fav;
-                      });
-                      fav == true
-                          ? Get.snackbar("Added Sucessfully",
-                              "The item was added succesfully",
-                              duration: const Duration(seconds: 1))
-                          : Get.snackbar("Removed Sucessfully",
-                              "The item was removed succesfully",
-                              duration: const Duration(seconds: 1));
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Icon(
-                        fav == false
-                            ? Icons.favorite_border
-                            : Icons.favorite_outlined,
-                        color: Colors.black,
-                        size: 22,
-                      ),
-                    ),
-                  ),
-                ),
-                widget.discount.isEmpty
-                    ? const SizedBox()
-                    : Container(
-                        height: 20,
-                        width: 45,
-                        decoration: const BoxDecoration(
-                          color: Colors.black12,
-                          borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(10),
-                            topRight: Radius.circular(10),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Center(
-                            child: FittedBox(
-                              child: Text(
-                                "- " + widget.discount.toString() + "%",
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
+                Column(
+                  children: [
+                    widget.discount.isEmpty
+                        ? const SizedBox()
+                        : Container(
+                            height: 20,
+                            width: 45,
+                            decoration: const BoxDecoration(
+                              color: Colors.black12,
+                              borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Center(
+                                child: FittedBox(
+                                  child: Text(
+                                    "- " + widget.discount.toString() + "%",
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      )
+                  ],
+                )
               ],
             ),
             const SizedBox(
               height: 10,
             ),
-            Padding(
+            Container(
               padding: const EdgeInsets.only(left: 8.0, right: 8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    widget.name,
-                    style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.w500),
+                  FittedBox(
+                    child: Text(
+                      widget.name,
+                      style: const TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.w500),
+                    ),
                   ),
                   const SizedBox(
                     height: 5,
@@ -187,5 +179,50 @@ class _ProductTileState extends State<ProductTile> {
         ),
       ),
     );
+  }
+
+  //Add to Favourites
+  Future addToWishlist(context) async {
+    try {
+      DocumentReference documentReferencer = FirebaseFirestore.instance
+          .collection("wishlist")
+          .doc(user!.email)
+          .collection("products")
+          .doc(widget.productID);
+      Map<String, dynamic> data = {
+        'productName': widget.name,
+        'brand_store': widget.brand,
+        'category': widget.category,
+        'description': widget.description,
+        'discount': widget.discount,
+        'price': widget.price,
+        'productID': widget.productID,
+        'offer': widget.offer,
+        'type': widget.type,
+        'image': widget.image,
+      };
+      documentReferencer.set(data).then((value) => Get.snackbar(
+          "Added", "Item Added to Wishlist",
+          backgroundColor: const Color.fromARGB(160, 105, 240, 175),
+          duration: const Duration(seconds: 1)));
+    } on FirebaseException catch (e) {
+      Get.snackbar("Failed to add", e.toString(),
+          backgroundColor: Colors.redAccent);
+    }
+  }
+
+  //Delete from Favourites
+  Future deleteFromWishlist() async {
+    FirebaseFirestore.instance
+        .collection("wishlist")
+        .doc(user!.email)
+        .collection("products")
+        .doc(widget.productID)
+        .delete()
+        .then((value) => Get.snackbar(
+              "Removed",
+              "Item removed from Wishlist",
+              duration: const Duration(seconds: 1),
+            ));
   }
 }

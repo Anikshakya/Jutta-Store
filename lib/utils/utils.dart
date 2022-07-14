@@ -28,8 +28,8 @@ class Utils {
       boxShadow: const [
         BoxShadow(
           color: Color.fromARGB(232, 204, 204, 204),
-          offset: Offset(0, 2),
-          blurRadius: 6,
+          offset: Offset(2, 1),
+          blurRadius: 3,
         ),
       ],
     );

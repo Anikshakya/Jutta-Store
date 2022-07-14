@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
 import "package:flutter/material.dart";
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -44,25 +45,22 @@ class _CircularStoryTileState extends State<CircularStoryTile> {
                 GestureDetector(
                   onTap: widget.onTapStory,
                   child: Container(
-                    height: 60,
-                    width: 60,
                     decoration: const BoxDecoration(
                       color: Colors.greenAccent,
                       shape: BoxShape.circle,
                     ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: CachedNetworkImage(
+                        imageUrl: widget.image,
+                        height: 60,
+                        width: 60,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                 ),
-                const Text("Name"),
-                // CachedNetworkImage(
-                //   imageUrl: widget.image,
-                //   height: MediaQuery.of(context).size.width * 0.46,
-                //   width: MediaQuery.of(context).size.width * 0.46,
-                //   fit: BoxFit.cover,
-                // ),
-                // const SizedBox(
-                //   height: 10,
-                // ),
-                // Text(widget.name),
+                Text(widget.name.toString()),
               ],
             ),
     );

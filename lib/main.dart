@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:jutta_ghar/pages/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
-import 'package:jutta_ghar/pages/splash_screen.dart';
+import 'package:jutta_ghar/views/splash_screen.dart';
 import 'package:jutta_ghar/utils/utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp().then((value) {});
   runApp(const MyApp());
 }
 
@@ -23,9 +22,7 @@ class MyApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       scaffoldMessengerKey: Utils.messangerKey,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(),
       home: const SplashScreen(),
     );
   }

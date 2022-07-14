@@ -27,7 +27,7 @@ class _AdminViewProductTileState extends State<AdminViewProductTile> {
       onTap: widget.ontap,
       child: Container(
         width: MediaQuery.of(context).size.width * 0.49,
-        padding: const EdgeInsets.only(left: 8, top: 8),
+        padding: const EdgeInsets.only(top: 8),
         child: Column(
           children: [
             CachedNetworkImage(

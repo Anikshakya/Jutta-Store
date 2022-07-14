@@ -1,4 +1,6 @@
 //Dont forget to add camera: ^0.9.8+1 to pubspec.yaml file & min sdk must be above 21
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';

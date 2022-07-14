@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:jutta_ghar/pages/admin_edit_page.dart';
-import 'package:jutta_ghar/pages/admin_upload_page.dart';
+
 import 'package:jutta_ghar/tiles/admin_product_tiles.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:jutta_ghar/views/admin_edit_page.dart';
+import 'package:jutta_ghar/views/admin_upload_page.dart';
 
 class AdminViewPage extends StatefulWidget {
   const AdminViewPage({
@@ -88,36 +89,41 @@ class _AdminViewPageState extends State<AdminViewPage> {
                   } else {
                     List<QueryDocumentSnapshot<Object?>> firestoreItems =
                         snapshot.data!.docs;
-
-                    return Wrap(
-                      children: List.generate(
-                        firestoreItems.length,
-                        (index) => AdminViewProductTile(
-                          name: firestoreItems[index]["productName"],
-                          description: firestoreItems[index]["description"],
-                          discount:
-                              firestoreItems[index]["discount"].toString(),
-                          price: firestoreItems[index]["price"].toString(),
-                          image: firestoreItems[index]["image"],
-                          offer: firestoreItems[index]["offer"],
-                          ontap: () {
-                            Get.to(
-                              () => AdminEditPage(
-                                productID: firestoreItems[index]["productID"],
-                                brand_store_name: firestoreItems[index]
-                                    ["brand_store"],
-                                name: firestoreItems[index]["productName"],
-                                description: firestoreItems[index]
-                                    ["description"],
-                                discount: firestoreItems[index]["discount"]
-                                    .toString(),
-                                price:
-                                    firestoreItems[index]["price"].toString(),
-                                image: firestoreItems[index]["image"],
-                                category: firestoreItems[index]["category"],
-                              ),
-                            );
-                          },
+                    return SizedBox(
+                      width: double.infinity,
+                      child: Wrap(
+                        alignment: WrapAlignment.spaceEvenly,
+                        children: List.generate(
+                          firestoreItems.length,
+                          (index) => AdminViewProductTile(
+                            name: firestoreItems[index]["productName"],
+                            description: firestoreItems[index]["description"],
+                            discount:
+                                firestoreItems[index]["discount"].toString(),
+                            price: firestoreItems[index]["price"].toString(),
+                            image: firestoreItems[index]["image"],
+                            offer: firestoreItems[index]["offer"],
+                            ontap: () {
+                              Get.to(
+                                () => AdminEditPage(
+                                  productID: firestoreItems[index]["productID"],
+                                  brand_store_name: firestoreItems[index]
+                                      ["brand_store"],
+                                  name: firestoreItems[index]["productName"],
+                                  description: firestoreItems[index]
+                                      ["description"],
+                                  discount: firestoreItems[index]["discount"]
+                                      .toString(),
+                                  price:
+                                      firestoreItems[index]["price"].toString(),
+                                  image: firestoreItems[index]["image"],
+                                  category: firestoreItems[index]["category"],
+                                  offer: firestoreItems[index]["offer"],
+                                  type: firestoreItems[index]["type"],
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     );
@@ -128,8 +134,9 @@ class _AdminViewPageState extends State<AdminViewPage> {
             Align(
               alignment: Alignment.bottomRight,
               child: Padding(
-                padding: const EdgeInsets.all(25),
+                padding: const EdgeInsets.all(20),
                 child: FloatingActionButton(
+                    backgroundColor: Colors.black,
                     onPressed: () {
                       Get.to(() => const AdminUploadPage(
                             brandUploadName: "",

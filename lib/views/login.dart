@@ -1,10 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:jutta_ghar/pages/forgot_password.dart';
-import 'package:jutta_ghar/pages/home.dart';
+import 'package:jutta_ghar/views/forgot_password.dart';
+import 'package:jutta_ghar/views/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:jutta_ghar/pages/sign_up.dart';
+import 'package:jutta_ghar/views/sign_up.dart';
 import 'package:jutta_ghar/utils/shapes.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:get/get.dart';
@@ -105,9 +105,6 @@ class _LoginPageState extends State<LoginPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
                           Row(
                             children: [
                               const Spacer(),
@@ -149,20 +146,12 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ],
                           ),
-                          const SizedBox(
-                            height: 55,
-                          ),
-                          const Center(
-                            child: Text(
-                              "LOGIN",
-                              style: TextStyle(
-                                fontSize: 40,
-                                fontWeight: FontWeight.w800,
-                              ),
+                          Center(
+                            child: Image.asset(
+                              "images/JuttaGhar.png",
+                              height: 150,
+                              width: 150,
                             ),
-                          ),
-                          const SizedBox(
-                            height: 8,
                           ),
                           Center(
                             child: const Text(

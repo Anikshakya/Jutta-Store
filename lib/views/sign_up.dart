@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:jutta_ghar/pages/home.dart';
+import 'package:jutta_ghar/views/home.dart';
 import 'package:jutta_ghar/utils/shapes.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:jutta_ghar/utils/utils.dart';
