@@ -20,6 +20,7 @@ class AdminEditPage extends StatefulWidget {
       brand_store_name,
       offer,
       type,
+      color,
       productID;
 
   const AdminEditPage({
@@ -34,6 +35,7 @@ class AdminEditPage extends StatefulWidget {
     this.productID,
     this.offer,
     this.type,
+    this.color,
   }) : super(key: key);
 
   @override
@@ -44,6 +46,7 @@ class _AdminEditPageState extends State<AdminEditPage> {
   var dropDownOffer = 'Offer';
   var dropDownCategory = 'Category';
   var dropDownType = 'Type';
+  var dropDownColor = 'Color';
   final user = FirebaseAuth.instance.currentUser;
 
   @override
@@ -51,6 +54,7 @@ class _AdminEditPageState extends State<AdminEditPage> {
     dropDownCategory = widget.category;
     dropDownOffer = widget.offer;
     dropDownType = widget.type;
+    dropDownColor = widget.color;
     brandStoreController.text = widget.brand_store_name;
     nameController.text = widget.name;
     descriptionController.text = widget.description;
@@ -176,100 +180,151 @@ class _AdminEditPageState extends State<AdminEditPage> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                                  Row(
+                                  Column(
                                     children: [
-                                      const Text("Category: "),
-                                      DropdownButton<String>(
-                                        value: dropDownCategory,
-                                        icon: const Icon(Icons.arrow_downward),
-                                        elevation: 16,
-                                        style: const TextStyle(
-                                            color: Colors.deepPurple),
-                                        underline: Container(
-                                          height: 2,
-                                          color: Colors.deepPurpleAccent,
-                                        ),
-                                        onChanged: (String? newValue) {
-                                          setState(() {
-                                            dropDownCategory = newValue!;
-                                          });
-                                        },
-                                        items: <String>[
-                                          'Category',
-                                          'Men',
-                                          'Women',
-                                          'Kids',
-                                          'Unisex',
-                                        ].map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(value),
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Text("Type: "),
-                                      DropdownButton<String>(
-                                        value: dropDownType,
-                                        icon: const Icon(Icons.arrow_downward),
-                                        elevation: 16,
-                                        style: const TextStyle(
-                                            color:
-                                                Color.fromARGB(255, 0, 0, 0)),
-                                        underline: Container(
-                                          height: 2,
-                                          color: Colors.deepPurpleAccent,
-                                        ),
-                                        onChanged: (String? newValue) {
-                                          setState(() {
-                                            dropDownType = newValue!;
-                                          });
-                                        },
-                                        items: <String>[
-                                          'Type',
-                                          'Sports',
-                                          'Classic',
-                                          'Casual'
-                                        ].map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(value),
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Text("Offer: "),
-                                      DropdownButton<String>(
-                                        value: dropDownOffer,
-                                        icon: const Icon(Icons.arrow_downward),
-                                        elevation: 16,
-                                        style: const TextStyle(
-                                            color: Colors.deepPurple),
-                                        underline: Container(
-                                          height: 2,
-                                          color: Colors.deepPurpleAccent,
-                                        ),
-                                        onChanged: (String? newValue) {
-                                          setState(() {
-                                            dropDownOffer = newValue!;
-                                          });
-                                        },
-                                        items: <String>['Offer', 'Yes', 'No']
-                                            .map<DropdownMenuItem<String>>(
+                                      Row(
+                                        children: [
+                                          const Text("Category: "),
+                                          DropdownButton<String>(
+                                            value: dropDownCategory,
+                                            icon: const Icon(
+                                                Icons.arrow_downward),
+                                            elevation: 16,
+                                            style: const TextStyle(
+                                                color: Colors.deepPurple),
+                                            underline: Container(
+                                              height: 2,
+                                              color: Colors.deepPurpleAccent,
+                                            ),
+                                            onChanged: (String? newValue) {
+                                              setState(() {
+                                                dropDownCategory = newValue!;
+                                              });
+                                            },
+                                            items: <String>[
+                                              'Category',
+                                              'Men',
+                                              'Women',
+                                              'Kids',
+                                              'Unisex',
+                                            ].map<DropdownMenuItem<String>>(
                                                 (String value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(value),
-                                          );
-                                        }).toList(),
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Text("Type: "),
+                                          DropdownButton<String>(
+                                            value: dropDownType,
+                                            icon: const Icon(
+                                                Icons.arrow_downward),
+                                            elevation: 16,
+                                            style: const TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 0, 0, 0)),
+                                            underline: Container(
+                                              height: 2,
+                                              color: Colors.deepPurpleAccent,
+                                            ),
+                                            onChanged: (String? newValue) {
+                                              setState(() {
+                                                dropDownType = newValue!;
+                                              });
+                                            },
+                                            items: <String>[
+                                              'Type',
+                                              'Sports',
+                                              'Classic',
+                                              'Casual'
+                                            ].map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          const Text("Offer: "),
+                                          DropdownButton<String>(
+                                            value: dropDownOffer,
+                                            icon: const Icon(
+                                                Icons.arrow_downward),
+                                            elevation: 16,
+                                            style: const TextStyle(
+                                                color: Colors.deepPurple),
+                                            underline: Container(
+                                              height: 2,
+                                              color: Colors.deepPurpleAccent,
+                                            ),
+                                            onChanged: (String? newValue) {
+                                              setState(() {
+                                                dropDownOffer = newValue!;
+                                              });
+                                            },
+                                            items: <String>[
+                                              'Offer',
+                                              'Yes',
+                                              'No'
+                                            ].map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Text("Color: "),
+                                          DropdownButton<String>(
+                                            value: dropDownColor,
+                                            icon: const Icon(
+                                                Icons.arrow_downward),
+                                            elevation: 16,
+                                            style: const TextStyle(
+                                                color: Colors.deepPurple),
+                                            underline: Container(
+                                              height: 2,
+                                              color: Colors.deepPurpleAccent,
+                                            ),
+                                            onChanged: (String? newValue) {
+                                              setState(() {
+                                                dropDownColor = newValue!;
+                                              });
+                                            },
+                                            items: <String>[
+                                              "Color",
+                                              "No Specific",
+                                              "Red",
+                                              "Black",
+                                              "Blue",
+                                              "White",
+                                              "Yellow"
+                                            ].map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
@@ -316,100 +371,151 @@ class _AdminEditPageState extends State<AdminEditPage> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                                  Row(
+                                  Column(
                                     children: [
-                                      const Text("Category: "),
-                                      DropdownButton<String>(
-                                        value: dropDownCategory,
-                                        icon: const Icon(Icons.arrow_downward),
-                                        elevation: 16,
-                                        style: const TextStyle(
-                                            color: Colors.deepPurple),
-                                        underline: Container(
-                                          height: 2,
-                                          color: Colors.deepPurpleAccent,
-                                        ),
-                                        onChanged: (String? newValue) {
-                                          setState(() {
-                                            dropDownCategory = newValue!;
-                                          });
-                                        },
-                                        items: <String>[
-                                          'Category',
-                                          'Men',
-                                          'Women',
-                                          'Kids',
-                                          'Unisex',
-                                        ].map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(value),
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Text("Type: "),
-                                      DropdownButton<String>(
-                                        value: dropDownType,
-                                        icon: const Icon(Icons.arrow_downward),
-                                        elevation: 16,
-                                        style: const TextStyle(
-                                            color:
-                                                Color.fromARGB(255, 0, 0, 0)),
-                                        underline: Container(
-                                          height: 2,
-                                          color: Colors.deepPurpleAccent,
-                                        ),
-                                        onChanged: (String? newValue) {
-                                          setState(() {
-                                            dropDownType = newValue!;
-                                          });
-                                        },
-                                        items: <String>[
-                                          'Type',
-                                          'Sports',
-                                          'Classic',
-                                          'Casual'
-                                        ].map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(value),
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Text("Offer: "),
-                                      DropdownButton<String>(
-                                        value: dropDownOffer,
-                                        icon: const Icon(Icons.arrow_downward),
-                                        elevation: 16,
-                                        style: const TextStyle(
-                                            color: Colors.deepPurple),
-                                        underline: Container(
-                                          height: 2,
-                                          color: Colors.deepPurpleAccent,
-                                        ),
-                                        onChanged: (String? newValue) {
-                                          setState(() {
-                                            dropDownOffer = newValue!;
-                                          });
-                                        },
-                                        items: <String>['Offer', 'Yes', 'No']
-                                            .map<DropdownMenuItem<String>>(
+                                      Row(
+                                        children: [
+                                          const Text("Category: "),
+                                          DropdownButton<String>(
+                                            value: dropDownCategory,
+                                            icon: const Icon(
+                                                Icons.arrow_downward),
+                                            elevation: 16,
+                                            style: const TextStyle(
+                                                color: Colors.deepPurple),
+                                            underline: Container(
+                                              height: 2,
+                                              color: Colors.deepPurpleAccent,
+                                            ),
+                                            onChanged: (String? newValue) {
+                                              setState(() {
+                                                dropDownCategory = newValue!;
+                                              });
+                                            },
+                                            items: <String>[
+                                              'Category',
+                                              'Men',
+                                              'Women',
+                                              'Kids',
+                                              'Unisex',
+                                            ].map<DropdownMenuItem<String>>(
                                                 (String value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(value),
-                                          );
-                                        }).toList(),
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Text("Type: "),
+                                          DropdownButton<String>(
+                                            value: dropDownType,
+                                            icon: const Icon(
+                                                Icons.arrow_downward),
+                                            elevation: 16,
+                                            style: const TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 0, 0, 0)),
+                                            underline: Container(
+                                              height: 2,
+                                              color: Colors.deepPurpleAccent,
+                                            ),
+                                            onChanged: (String? newValue) {
+                                              setState(() {
+                                                dropDownType = newValue!;
+                                              });
+                                            },
+                                            items: <String>[
+                                              'Type',
+                                              'Sports',
+                                              'Classic',
+                                              'Casual'
+                                            ].map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          const Text("Offer: "),
+                                          DropdownButton<String>(
+                                            value: dropDownOffer,
+                                            icon: const Icon(
+                                                Icons.arrow_downward),
+                                            elevation: 16,
+                                            style: const TextStyle(
+                                                color: Colors.deepPurple),
+                                            underline: Container(
+                                              height: 2,
+                                              color: Colors.deepPurpleAccent,
+                                            ),
+                                            onChanged: (String? newValue) {
+                                              setState(() {
+                                                dropDownOffer = newValue!;
+                                              });
+                                            },
+                                            items: <String>[
+                                              'Offer',
+                                              'Yes',
+                                              'No'
+                                            ].map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Text("Color: "),
+                                          DropdownButton<String>(
+                                            value: dropDownColor,
+                                            icon: const Icon(
+                                                Icons.arrow_downward),
+                                            elevation: 16,
+                                            style: const TextStyle(
+                                                color: Colors.deepPurple),
+                                            underline: Container(
+                                              height: 2,
+                                              color: Colors.deepPurpleAccent,
+                                            ),
+                                            onChanged: (String? newValue) {
+                                              setState(() {
+                                                dropDownColor = newValue!;
+                                              });
+                                            },
+                                            items: <String>[
+                                              "Color",
+                                              "No Specific",
+                                              "Red",
+                                              "Black",
+                                              "Blue",
+                                              "White",
+                                              "Yellow"
+                                            ].map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
@@ -489,6 +595,7 @@ class _AdminEditPageState extends State<AdminEditPage> {
           'price': priceController.text.trim(),
           'offer': dropDownOffer.trim(),
           'type': dropDownType.trim(),
+          'color': dropDownColor.trim()
         };
         await documentReferencer
             .update(data)
@@ -534,6 +641,7 @@ class _AdminEditPageState extends State<AdminEditPage> {
                 'price': priceController.text.trim(),
                 'offer': dropDownOffer.trim(),
                 'type': dropDownType.trim(),
+                'color': dropDownColor.trim(),
               };
               await documentReferencer
                   .update(data)

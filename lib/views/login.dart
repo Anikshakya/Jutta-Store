@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jutta_ghar/views/bottom_nav.dart';
 import 'package:jutta_ghar/views/forgot_password.dart';
-import 'package:jutta_ghar/views/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:jutta_ghar/views/sign_up.dart';
 import 'package:jutta_ghar/utils/shapes.dart';
@@ -79,7 +79,9 @@ class _LoginPageState extends State<LoginPage> {
               child: Text("Something went wrong"),
             );
           } else if (snapshot.hasData) {
-            return const HomePage();
+            return const BottomNav(
+              index: 0,
+            );
           } else {
             return Scaffold(
               backgroundColor: const Color.fromARGB(255, 221, 221, 221),

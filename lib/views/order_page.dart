@@ -112,7 +112,7 @@ class _OrderPageState extends State<OrderPage> {
           SliverAppBar(
             backgroundColor: Colors.white,
             pinned: true,
-            expandedHeight: 205,
+            expandedHeight: 200,
             leading: Row(
               children: [
                 GestureDetector(
@@ -137,18 +137,40 @@ class _OrderPageState extends State<OrderPage> {
               ],
             ),
             flexibleSpace: FlexibleSpaceBar(
-              background: Stack(
-                children: [
-                  CachedNetworkImage(
-                    imageUrl: widget.image,
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    fit: BoxFit.scaleDown,
-                  ),
-                  Container(
-                    color: const Color.fromARGB(52, 0, 0, 0),
-                  )
-                ],
+              background: GestureDetector(
+                onTap: () {
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: InteractiveViewer(
+                        child: AlertDialog(
+                          titlePadding: const EdgeInsets.all(0),
+                          title: CachedNetworkImage(
+                            imageUrl: widget.image,
+                            height: 300,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                child: Stack(
+                  children: [
+                    CachedNetworkImage(
+                      imageUrl: widget.image,
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.cover,
+                    ),
+                    Container(
+                      color: const Color.fromARGB(52, 0, 0, 0),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
@@ -562,7 +584,7 @@ class _OrderPageState extends State<OrderPage> {
                                   widget.discount.isEmpty == true
                                       ? Text("Rs. " + (total + 100).toString())
                                       : Text(
-                                          "Rs. ${(100 + total) - ((100 + total) * (double.parse(widget.discount) / 100))}",
+                                          "Rs. ${(total) - ((total) * (double.parse(widget.discount) / 100)) + 100}",
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w600),
                                         ),

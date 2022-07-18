@@ -90,7 +90,7 @@ class _ProductTileState extends State<ProductTile> {
                         height: 20,
                         width: 45,
                         decoration: const BoxDecoration(
-                          color: Colors.black12,
+                          color: Colors.black,
                           borderRadius: BorderRadius.only(
                             bottomRight: Radius.circular(10),
                             topRight: Radius.circular(10),
@@ -103,6 +103,7 @@ class _ProductTileState extends State<ProductTile> {
                               child: Text(
                                 "- " + widget.discount.toString() + "%",
                                 style: const TextStyle(
+                                  color: Colors.white,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
                                 ),

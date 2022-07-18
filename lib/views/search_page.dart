@@ -32,6 +32,7 @@ class _SearchPageState extends State<SearchPage> {
           child: Center(
             child: TextField(
               textCapitalization: TextCapitalization.words,
+              autofocus: true,
               onChanged: ((value) {
                 setState(() {
                   searchKey = value;

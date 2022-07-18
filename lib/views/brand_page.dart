@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:jutta_ghar/tiles/products_tiles.dart';
@@ -78,71 +80,80 @@ class _BrandPageState extends State<BrandPage> {
               const SizedBox(
                 height: 10,
               ),
-              StreamBuilder<QuerySnapshot>(
-                stream: (searchKey != "")
-                    ? FirebaseFirestore.instance
-                        .collection('products')
-                        .where("productName", isGreaterThanOrEqualTo: searchKey)
-                        .where("productName", isLessThan: searchKey + 'z')
-                        .snapshots()
-                    : FirebaseFirestore.instance
-                        .collection("products")
-                        .snapshots(),
-                builder: (BuildContext context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else {
-                    List<QueryDocumentSnapshot<Object?>> firestoreProducts =
-                        snapshot.data!.docs;
-                    return SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Wrap(
-                        alignment: WrapAlignment.spaceEvenly,
-                        children: List.generate(
-                          firestoreProducts.length,
-                          (index) => firestoreProducts[index]['brand_store'] ==
-                                  widget.brandName
-                              ? ProductTile(
-                                  name: firestoreProducts[index]["productName"],
-                                  description: firestoreProducts[index]
-                                      ["description"],
-                                  discount: firestoreProducts[index]["discount"]
-                                      .toString(),
-                                  price: firestoreProducts[index]["price"]
-                                      .toString(),
-                                  image: firestoreProducts[index]["image"],
-                                  ontap: () => Get.to(
-                                    () => OrderPage(
-                                      image: firestoreProducts[index]['image'],
-                                      price: firestoreProducts[index]['price'],
-                                      name: firestoreProducts[index]
-                                          ['productName'],
-                                      brand: firestoreProducts[index]
-                                              ['brand_store']
-                                          .toUpperCase(),
-                                      description: firestoreProducts[index]
-                                          ["description"],
-                                      discount: firestoreProducts[index]
-                                              ['discount']
-                                          .toString(),
-                                      category: firestoreProducts[index]
-                                          ['category'],
-                                      offer: firestoreProducts[index]['offer'],
-                                      productID: firestoreProducts[index]
-                                          ['productID'],
-                                      type: firestoreProducts[index]['type'],
+              Padding(
+                padding: const EdgeInsets.only(left: 7),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: (searchKey != "")
+                      ? FirebaseFirestore.instance
+                          .collection('products')
+                          .where("productName",
+                              isGreaterThanOrEqualTo: searchKey)
+                          .where("productName", isLessThan: searchKey + 'z')
+                          .snapshots()
+                      : FirebaseFirestore.instance
+                          .collection("products")
+                          .snapshots(),
+                  builder: (BuildContext context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else {
+                      List<QueryDocumentSnapshot<Object?>> firestoreProducts =
+                          snapshot.data!.docs;
+                      return SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Wrap(
+                          children: List.generate(
+                            firestoreProducts.length,
+                            (index) => firestoreProducts[index]
+                                        ['brand_store'] ==
+                                    widget.brandName
+                                ? ProductTile(
+                                    name: firestoreProducts[index]
+                                        ["productName"],
+                                    description: firestoreProducts[index]
+                                        ["description"],
+                                    discount: firestoreProducts[index]
+                                            ["discount"]
+                                        .toString(),
+                                    price: firestoreProducts[index]["price"]
+                                        .toString(),
+                                    image: firestoreProducts[index]["image"],
+                                    ontap: () => Get.to(
+                                      () => OrderPage(
+                                        image: firestoreProducts[index]
+                                            ['image'],
+                                        price: firestoreProducts[index]
+                                            ['price'],
+                                        name: firestoreProducts[index]
+                                            ['productName'],
+                                        brand: firestoreProducts[index]
+                                                ['brand_store']
+                                            .toUpperCase(),
+                                        description: firestoreProducts[index]
+                                            ["description"],
+                                        discount: firestoreProducts[index]
+                                                ['discount']
+                                            .toString(),
+                                        category: firestoreProducts[index]
+                                            ['category'],
+                                        offer: firestoreProducts[index]
+                                            ['offer'],
+                                        productID: firestoreProducts[index]
+                                            ['productID'],
+                                        type: firestoreProducts[index]['type'],
+                                      ),
                                     ),
-                                  ),
-                                )
-                              : const SizedBox(),
+                                  )
+                                : const SizedBox(),
+                          ),
                         ),
-                      ),
-                    );
-                  }
-                },
+                      );
+                    }
+                  },
+                ),
               ),
             ],
           ),

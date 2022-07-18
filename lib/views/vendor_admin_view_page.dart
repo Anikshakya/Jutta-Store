@@ -111,6 +111,7 @@ class _VendorAdminViewPageState extends State<VendorAdminViewPage> {
                                   ontap: () {
                                     Get.to(
                                       () => AdminEditPage(
+                                        color: firestoreItems[index]["color"],
                                         offer: firestoreItems[index]["offer"],
                                         type: firestoreItems[index]["type"],
                                         productID: firestoreItems[index]

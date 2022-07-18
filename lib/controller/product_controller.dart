@@ -9,7 +9,6 @@
 //   void onInit() {
 //     super.onInit();
 //     fetchProducts();
-//     productList.bindStream(getAllProducts());
 //   }
 
 //   //Get data from firebase
@@ -19,5 +18,7 @@
 //             query.docs.map((item) => Product.fromJson(item.data())).toList());
 //   }
 
-//   void fetchProducts() async {}
+//   void fetchProducts() async {
+//     productList.value = [getAllProducts()];
+//   }
 // }

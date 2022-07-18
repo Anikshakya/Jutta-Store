@@ -35,17 +35,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
-  flutter_lints: ^1.0.0
-
   #firebase
   firebase_core: ^1.18.0
   firebase_auth: ^3.3.20
@@ -84,7 +73,36 @@ dev_dependencies:
 
   #Carsouel Slider
   flutter_carousel_slider: ^1.0.8
-  smooth_page_indicator: ^1.0.0+2
+
+  #Date CountDown
+  date_count_down: ^2.1.0
+
+  #Pull-To-Refresh
+  pull_to_refresh: ^2.0.0
+
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^1.0.0
+
+  flutter_launcher_icons: "^0.9.2"
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "images/AppLogo.png"
+
+
+
+
 
 
 # For information on the generic Dart part of this file, see the

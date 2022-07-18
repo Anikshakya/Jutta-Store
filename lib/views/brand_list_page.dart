@@ -22,33 +22,10 @@ class _BrandListsState extends State<BrandLists> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         iconTheme: const IconThemeData(color: Colors.black, size: 25),
         actionsIconTheme: const IconThemeData(color: Colors.black, size: 28),
         backgroundColor: Colors.white,
         elevation: 0.5,
-        actions: [
-          Row(
-            children: [
-              const SizedBox(
-                width: 20,
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: const Icon(
-                  Icons.arrow_back_ios,
-                  color: Color.fromARGB(255, 46, 46, 46),
-                  size: 21,
-                ),
-              ),
-              const SizedBox(
-                width: 15,
-              ),
-            ],
-          ),
-        ],
         title: Container(
           width: MediaQuery.of(context).size.width * 0.9,
           height: 40,
@@ -115,6 +92,7 @@ class _BrandListsState extends State<BrandLists> {
                           return BrandViewTile(
                             image: firestoreitems[index]['image'],
                             brandName: firestoreitems[index]['brand_name'],
+                            logo: firestoreitems[index]["logo"],
                             onTap: () {
                               Get.to(() => BrandPage(
                                     brandName: firestoreitems[index]

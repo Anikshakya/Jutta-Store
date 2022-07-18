@@ -6,27 +6,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:jutta_ghar/views/order_page.dart';
 import 'package:get/get.dart';
 
-class Cart extends StatefulWidget {
-  const Cart({Key? key}) : super(key: key);
+class CartPage extends StatefulWidget {
+  const CartPage({Key? key}) : super(key: key);
 
   @override
-  State<Cart> createState() => _CartState();
+  State<CartPage> createState() => _CartPageState();
 }
 
-class _CartState extends State<Cart> {
+class _CartPageState extends State<CartPage> {
   //Current User
   final user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_back),
-          color: Colors.black,
-        ),
         backgroundColor: Colors.white,
         title: Text(
           "SHOPPING CART",
@@ -40,7 +33,7 @@ class _CartState extends State<Cart> {
           IconButton(
               onPressed: deleteAllCartItems,
               icon: Icon(
-                Icons.delete_rounded,
+                Icons.delete_outline_outlined,
                 color: Colors.black,
               ))
         ],

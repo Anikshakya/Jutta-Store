@@ -23,6 +23,7 @@ class _CategoryButtonState extends State<CategoryButton> {
           top: 12,
           bottom: 12,
           left: 4,
+          right: 4,
         ),
         decoration: BoxDecoration(
           color: Color(int.parse(widget.color)),

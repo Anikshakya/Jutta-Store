@@ -12,11 +12,10 @@ import 'package:jutta_ghar/tiles/test_tile.dart';
 import 'package:jutta_ghar/views/admin_view_page.dart';
 import 'package:jutta_ghar/views/brand_list_page.dart';
 import 'package:jutta_ghar/views/brand_page.dart';
-import 'package:jutta_ghar/views/cart.dart';
+import 'package:jutta_ghar/views/color_view.dart';
 import 'package:jutta_ghar/views/offer_page.dart';
 import 'package:jutta_ghar/views/order_page.dart';
 import 'package:jutta_ghar/views/search_page.dart';
-import 'package:jutta_ghar/views/settings_page.dart';
 import 'package:jutta_ghar/views/wishlist.dart';
 import 'package:jutta_ghar/tiles/products_tiles.dart';
 import 'package:jutta_ghar/views/superadmin_user_view_page.dart';
@@ -27,6 +26,7 @@ import 'package:sticky_headers/sticky_headers.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
 import 'package:flutter_carousel_slider/carousel_slider_indicators.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:date_count_down/date_count_down.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -107,157 +107,24 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         actions: [
-          Padding(
-            padding: EdgeInsets.only(left: 20, right: 10),
-            child: Icon(Icons.person),
-          ),
           GestureDetector(
             onTap: () => Get.to(() => SearchPage()),
             child: Padding(
-              padding: EdgeInsets.only(left: 10, right: 10),
+              padding: EdgeInsets.only(left: 20, right: 10),
               child: Icon(Icons.search_rounded),
             ),
           ),
           GestureDetector(
-            onTap: () => Get.to(() => Cart()),
+            onTap: () => Get.to(() => ColorView()),
             child: Padding(
-              padding: EdgeInsets.only(left: 10, right: 10, top: 15),
-              child: Stack(
-                children: [
-                  Icon(Icons.shopping_bag_outlined),
-                  StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection("cart")
-                        .doc(user!.email)
-                        .collection("products")
-                        .snapshots(),
-                    builder: ((context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const SizedBox();
-                      } else if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return const SizedBox();
-                      } else {
-                        List<QueryDocumentSnapshot<Object?>>
-                            firestoreWishlistData = snapshot.data!.docs;
-                        return Padding(
-                          padding: const EdgeInsets.only(left: 14),
-                          child: Container(
-                            height: 17,
-                            width: 17,
-                            decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 255, 217, 193),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: Text(
-                                firestoreWishlistData.length.toString(),
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 11),
-                              ),
-                            ),
-                          ),
-                        );
-                      }
-                    }),
-                  ),
-                ],
-              ),
-            ),
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: Icon(Icons.color_lens_outlined)),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 10, right: 20),
+            child: Icon(Icons.message_rounded),
           ),
         ],
-      ),
-      drawer: SafeArea(
-        //Drawer
-        child: Drawer(
-          child: ListView(
-            children: [
-              DrawerHeader(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection("users")
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return Center(child: const Text("No data found!"));
-                        } else if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else {
-                          List<QueryDocumentSnapshot<Object?>>
-                              fireStoreUserData = snapshot.data!.docs;
-                          final fName = fireStoreUserData[0]['name'].split(" ");
-                          return Column(
-                            children: [
-                              Text(
-                                "Hello, " + fName[0],
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              Text(
-                                fireStoreUserData[0]["email"],
-                                style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w200),
-                              ),
-                            ],
-                          );
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              //Drawer Body
-              GestureDetector(
-                onTap: () => Get.to(() => SettingsPage()),
-                child: ListTile(
-                  iconColor: Colors.black,
-                  leading: Icon(Icons.settings),
-                  title: Row(
-                    children: const [
-                      Text(
-                        'Settings',
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black),
-                      ),
-                      Spacer(),
-                      Icon(
-                        Icons.arrow_forward_ios_outlined,
-                        size: 16,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () => FirebaseAuth.instance.signOut(),
-                child: ListTile(
-                  iconColor: Colors.black,
-                  leading: Icon(Icons.exit_to_app_rounded),
-                  title: Text(
-                    'Logout',
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
       ),
       body: SafeArea(
         child: Stack(
@@ -281,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                           List<QueryDocumentSnapshot<Object?>>
                               firestoreBannerImage = snapshot.data!.docs;
                           return SizedBox(
-                            height: MediaQuery.of(context).size.height / 4,
+                            height: MediaQuery.of(context).size.height / 5,
                             child: CarouselSlider.builder(
                                 unlimitedMode: true,
                                 itemCount: firestoreBannerImage.length,
@@ -305,21 +172,36 @@ class _HomePageState extends State<HomePage> {
                           );
                         }
                       })),
-                  //Story Section
 
                   //Offer Section
                   Padding(
                     padding: const EdgeInsets.only(
-                        left: 10, right: 10, top: 25, bottom: 5),
+                        left: 10, right: 10, top: 16, bottom: 5),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           "OFFERS",
                           style: TextStyle(
-                              letterSpacing: 0.5,
-                              fontSize: 16,
+                              letterSpacing: 0.4,
+                              fontSize: 15,
                               fontWeight: FontWeight.w500),
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Ends In: ",
+                              style: TextStyle(fontWeight: FontWeight.w300),
+                            ),
+                            CountDownText(
+                              due: DateTime.parse("2022-08-20 00:00:00"),
+                              finishedText: "Ended",
+                              showLabel: true,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w300),
+                            ),
+                          ],
                         ),
                         GestureDetector(
                           onTap: () => Get.to(() => OfferPage()),
@@ -331,7 +213,7 @@ class _HomePageState extends State<HomePage> {
                                     fontSize: 15, fontWeight: FontWeight.w400),
                               ),
                               SizedBox(
-                                width: 10,
+                                width: 5,
                               ),
                               Icon(
                                 Icons.arrow_forward_ios,
@@ -400,14 +282,14 @@ class _HomePageState extends State<HomePage> {
                   //Brands Section
                   Padding(
                     padding: const EdgeInsets.only(
-                        left: 10, right: 15, top: 25, bottom: 5),
+                        left: 10, right: 15, top: 16, bottom: 5),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text("OUR BRAND PARTNERS",
                             style: TextStyle(
-                                letterSpacing: 0.5,
-                                fontSize: 16,
+                                letterSpacing: 0.4,
+                                fontSize: 15,
                                 fontWeight: FontWeight.w500)),
                         GestureDetector(
                           onTap: () => Get.to(() => BrandLists()),
@@ -419,7 +301,7 @@ class _HomePageState extends State<HomePage> {
                                     fontSize: 15, fontWeight: FontWeight.w400),
                               ),
                               SizedBox(
-                                width: 10,
+                                width: 5,
                               ),
                               Icon(
                                 Icons.arrow_forward_ios,
@@ -522,7 +404,7 @@ class _HomePageState extends State<HomePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: const [
-                        Text("test2"),
+                        Text("Add to Fav"),
                         Text("View More"),
                       ],
                     ),
@@ -530,7 +412,7 @@ class _HomePageState extends State<HomePage> {
                   StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('products')
-                        .where("offer", isEqualTo: "Yes")
+                        .where("offer", isEqualTo: "No")
                         .snapshots(),
                     builder: (BuildContext context, snapshot) {
                       if (!snapshot.hasData) {
@@ -548,8 +430,6 @@ class _HomePageState extends State<HomePage> {
                             shrinkWrap: true,
                             itemCount: firestoreProducts.length,
                             itemBuilder: (context, index) => TestTile(
-                              // whishlistFlag: firestoreProducts[index]
-                              //     ["wishlist"],
                               name: firestoreProducts[index]["productName"],
                               description: firestoreProducts[index]
                                   ["description"],
@@ -592,160 +472,155 @@ class _HomePageState extends State<HomePage> {
 
                   //Categories
                   Obx(
-                    () => Column(
-                      children: [
-                        //Category Selection
-                        StickyHeader(
-                          header: Container(
-                            height: 60,
-                            margin: EdgeInsets.only(bottom: 10),
-                            color: Colors.white,
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: categoryName.length,
-                              itemBuilder: (context, index) => CategoryButton(
-                                categoryName:
-                                    categoryName[index]["name"].toString(),
-                                ontap: () {
-                                  _categoryName.value =
-                                      categoryName[index]["name"].toString();
-                                },
-                                color: categoryName[index]["name"] ==
-                                        _categoryName.value
-                                    ? "0xff000000"
-                                    : "0xffededed",
-                                textColor: categoryName[index]["name"] ==
-                                        _categoryName.value
-                                    ? "0xffffffff"
-                                    : "0xff000000",
-                              ),
-                            ),
-                          ),
-                          content: //All Products acc to category selection
-                              Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 10,
-                                ),
-                                child: Text(
-                                  _categoryName.value.toUpperCase(),
-                                  style: TextStyle(
-                                      letterSpacing: 0.5,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                              StreamBuilder<QuerySnapshot>(
-                                stream: _categoryName.value == "All"
-                                    ? FirebaseFirestore.instance
-                                        .collection('products')
-                                        .snapshots()
-                                    : _categoryName.value == "Men" ||
-                                            _categoryName.value == "Women" ||
-                                            _categoryName.value == "Kids"
-                                        ? FirebaseFirestore.instance
-                                            .collection('products')
-                                            .where("category",
-                                                isEqualTo: _categoryName.value)
-                                            .where("")
-                                            .snapshots()
-                                        : FirebaseFirestore.instance
-                                            .collection('products')
-                                            .where("type",
-                                                isEqualTo: _categoryName.value)
-                                            .where("")
-                                            .snapshots(),
-                                builder: (BuildContext context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height -
-                                              kToolbarHeight,
-                                      child: Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    );
-                                  } else if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height -
-                                              kToolbarHeight,
-                                      child: Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    );
-                                  } else {
-                                    List<QueryDocumentSnapshot<Object?>>
-                                        firestoreProducts = snapshot.data!.docs;
-                                    return SizedBox(
-                                      width: MediaQuery.of(context).size.width,
-                                      child: Wrap(
-                                        alignment: WrapAlignment.spaceEvenly,
-                                        children: List.generate(
-                                          firestoreProducts.length,
-                                          (index) => ProductTile(
-                                              name: firestoreProducts[index]
-                                                  ["productName"],
-                                              description:
-                                                  firestoreProducts[index]
-                                                      ["description"],
-                                              discount: firestoreProducts[index]
-                                                      ["discount"]
-                                                  .toString(),
-                                              price: firestoreProducts[index]
-                                                      ["price"]
-                                                  .toString(),
-                                              image: firestoreProducts[index]
-                                                  ["image"],
-                                              ontap: () => Get.to(
-                                                    () => OrderPage(
-                                                      image: firestoreProducts[
-                                                          index]['image'],
-                                                      price: firestoreProducts[
-                                                          index]['price'],
-                                                      name: firestoreProducts[
-                                                          index]['productName'],
-                                                      brand: firestoreProducts[
-                                                                  index]
-                                                              ['brand_store']
-                                                          .toUpperCase(),
-                                                      description:
-                                                          firestoreProducts[
-                                                                  index]
-                                                              ["description"],
-                                                      discount:
-                                                          firestoreProducts[
-                                                                      index]
-                                                                  ['discount']
-                                                              .toString(),
-                                                      category:
-                                                          firestoreProducts[
-                                                                  index]
-                                                              ['category'],
-                                                      offer: firestoreProducts[
-                                                          index]['offer'],
-                                                      productID:
-                                                          firestoreProducts[
-                                                                  index]
-                                                              ['productID'],
-                                                      type: firestoreProducts[
-                                                          index]['type'],
-                                                    ),
-                                                  )),
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-                            ],
+                    () => StickyHeader(
+                      header: Container(
+                        height: 60,
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.only(bottom: 10),
+                        color: Colors.white,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: categoryName.length,
+                          itemBuilder: (context, index) => CategoryButton(
+                            categoryName:
+                                categoryName[index]["name"].toString(),
+                            ontap: () {
+                              _categoryName.value =
+                                  categoryName[index]["name"].toString();
+                            },
+                            color: categoryName[index]["name"] ==
+                                    _categoryName.value
+                                ? "0xff000000"
+                                : "0xffededed",
+                            textColor: categoryName[index]["name"] ==
+                                    _categoryName.value
+                                ? "0xffffffff"
+                                : "0xff000000",
                           ),
                         ),
-                      ],
+                      ),
+                      content: //All Products acc to category selection
+                          Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 10,
+                            ),
+                            child: Text(
+                              _categoryName.value.toUpperCase(),
+                              style: TextStyle(
+                                  letterSpacing: 0.5,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 7),
+                            child: StreamBuilder<QuerySnapshot>(
+                              stream: _categoryName.value == "All"
+                                  ? FirebaseFirestore.instance
+                                      .collection('products')
+                                      .snapshots()
+                                  : _categoryName.value == "Men" ||
+                                          _categoryName.value == "Women" ||
+                                          _categoryName.value == "Kids"
+                                      ? FirebaseFirestore.instance
+                                          .collection('products')
+                                          .where("category",
+                                              isEqualTo: _categoryName.value)
+                                          .snapshots()
+                                      : FirebaseFirestore.instance
+                                          .collection('products')
+                                          .where("type",
+                                              isEqualTo: _categoryName.value)
+                                          .snapshots(),
+                              builder: (BuildContext context, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return SizedBox(
+                                    height: MediaQuery.of(context).size.height -
+                                        kToolbarHeight,
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
+                                } else if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return SizedBox(
+                                    height: MediaQuery.of(context).size.height -
+                                        kToolbarHeight,
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
+                                } else {
+                                  List<QueryDocumentSnapshot<Object?>>
+                                      firestoreProducts = snapshot.data!.docs;
+                                  return SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Wrap(
+                                      children: List.generate(
+                                        firestoreProducts.length,
+                                        (index) => ProductTile(
+                                            name: firestoreProducts[index]
+                                                ["productName"],
+                                            description:
+                                                firestoreProducts[index]
+                                                    ["description"],
+                                            discount: firestoreProducts[index]
+                                                    ["discount"]
+                                                .toString(),
+                                            price: firestoreProducts[index]
+                                                    ["price"]
+                                                .toString(),
+                                            image: firestoreProducts[index]
+                                                ["image"],
+                                            ontap: () => Get.to(
+                                                  () => OrderPage(
+                                                    image:
+                                                        firestoreProducts[index]
+                                                            ['image'],
+                                                    price:
+                                                        firestoreProducts[index]
+                                                            ['price'],
+                                                    name:
+                                                        firestoreProducts[index]
+                                                            ['productName'],
+                                                    brand:
+                                                        firestoreProducts[index]
+                                                                ['brand_store']
+                                                            .toUpperCase(),
+                                                    description:
+                                                        firestoreProducts[index]
+                                                            ["description"],
+                                                    discount:
+                                                        firestoreProducts[index]
+                                                                ['discount']
+                                                            .toString(),
+                                                    category:
+                                                        firestoreProducts[index]
+                                                            ['category'],
+                                                    offer:
+                                                        firestoreProducts[index]
+                                                            ['offer'],
+                                                    productID:
+                                                        firestoreProducts[index]
+                                                            ['productID'],
+                                                    type:
+                                                        firestoreProducts[index]
+                                                            ['type'],
+                                                  ),
+                                                )),
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

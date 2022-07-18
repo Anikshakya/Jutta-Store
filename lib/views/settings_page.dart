@@ -34,16 +34,10 @@ class _SettingsState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back),
-          color: Colors.black,
-        ),
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         title: const Text(
-          "SETTINGS",
+          "ACCOUNTS & SETTINGS",
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w800,
@@ -356,7 +350,7 @@ class _SettingsState extends State<SettingsPage> {
                   GestureDetector(
                     onTap: () {
                       String feedbackEmail =
-                          "mailto:aniklinkin@gmail.com?subject=Feedback to FitnessGhar&body=";
+                          "mailto:aniklinkin@gmail.com?subject=Feedback to JuttaGhar&body=";
                       launchUrl(Uri.parse(feedbackEmail));
                     },
                     child: Padding(
@@ -430,7 +424,7 @@ class _SettingsState extends State<SettingsPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: const [
                                 Text(
-                                  "Fitness Ghar provides innovative apps and services that track and manage health and fitness data to motivate individuals to get in shape, stay healthyy and improve overall fitness. We put quality at the core of everything we do, and this reflects not only in our product but also in our team spirit and collaborations.",
+                                  "Jutta Ghar provides innovative apps and services that helps users to shop online. We put quality at the core of everything we do, and this reflects not only in our product but also in our team spirit and collaborations.",
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
                                     color: Colors.grey,
@@ -514,6 +508,38 @@ class _SettingsState extends State<SettingsPage> {
                     ),
                   ),
                 ],
+              ),
+            ),
+            //-----LogOut
+            SizedBox(
+              height: 8,
+            ),
+            GestureDetector(
+              onTap: () => FirebaseAuth.instance.signOut(),
+              child: Container(
+                height: 60,
+                padding: EdgeInsets.only(left: 6),
+                decoration: containerDecoration(),
+                child: Row(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: 8, bottom: 8, left: 10, right: 14),
+                      child: Icon(
+                        Icons.exit_to_app_rounded,
+                        color: Color.fromARGB(255, 116, 116, 116),
+                      ),
+                    ),
+                    Text(
+                      "Log Out",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: Color.fromARGB(255, 116, 116, 116),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             //----Links to Social Media----

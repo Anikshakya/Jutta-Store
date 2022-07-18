@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
       scaffoldMessengerKey: Utils.messangerKey,
-      title: 'Flutter Demo',
+      title: 'Jutta Ghar',
       theme: ThemeData(),
       home: const SplashScreen(),
     );
