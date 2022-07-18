@@ -126,6 +126,8 @@ class _ProductTileState extends State<ProductTile> {
                     widget.name,
                     style: const TextStyle(
                         fontSize: 14, fontWeight: FontWeight.w500),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(
                     height: 5,
@@ -137,6 +139,8 @@ class _ProductTileState extends State<ProductTile> {
                       fontWeight: FontWeight.w300,
                       color: Colors.grey,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(
                     height: 5,

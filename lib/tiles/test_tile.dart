@@ -159,6 +159,8 @@ class _TestTileState extends State<TestTile> {
                       fontWeight: FontWeight.w300,
                       color: Colors.grey,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(
                     height: 5,
