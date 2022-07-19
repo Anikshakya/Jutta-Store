@@ -12,7 +12,6 @@ import 'package:jutta_ghar/tiles/test_tile.dart';
 import 'package:jutta_ghar/views/admin_view_page.dart';
 import 'package:jutta_ghar/views/brand_list_page.dart';
 import 'package:jutta_ghar/views/brand_page.dart';
-import 'package:jutta_ghar/views/color_view.dart';
 import 'package:jutta_ghar/views/offer_page.dart';
 import 'package:jutta_ghar/views/order_page.dart';
 import 'package:jutta_ghar/views/search_page.dart';
@@ -47,64 +46,73 @@ class _HomePageState extends State<HomePage> {
           color: Colors.black,
         ),
         backgroundColor: Colors.white,
+        centerTitle: true,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            GestureDetector(
-              onTap: () => Get.to(() => Wishlist()),
-              child: Stack(
-                children: [
-                  Icon(Icons.favorite_border_rounded),
-                  StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection("wishlist")
-                        .doc(user!.email)
-                        .collection("products")
-                        .snapshots(),
-                    builder: ((context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const SizedBox();
-                      } else if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return const SizedBox();
-                      } else {
-                        List<QueryDocumentSnapshot<Object?>>
-                            firestoreWishlistData = snapshot.data!.docs;
-                        return Padding(
-                          padding: const EdgeInsets.only(left: 18),
-                          child: Container(
-                            height: 17,
-                            width: 17,
-                            decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 255, 217, 193),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: Text(
-                                firestoreWishlistData.length.toString(),
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 11),
-                              ),
-                            ),
-                          ),
-                        );
-                      }
-                    }),
-                  ),
-                ],
+            Padding(
+              padding: const EdgeInsets.only(left: 2, right: 2),
+              child: Image.asset(
+                "images/AppLogo.png",
+                height: 40,
+                width: 40,
+                fit: BoxFit.cover,
               ),
             ),
-            Spacer(),
-            Center(
-              child: Text(
-                "JUTTA GHAR",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w300),
-              ),
+            Text(
+              "JUTTA GHAR",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w300),
             ),
           ],
+        ),
+        leading: Center(
+          child: GestureDetector(
+            onTap: () => Get.to(() => Wishlist()),
+            child: Stack(
+              children: [
+                Icon(Icons.favorite_border_rounded),
+                StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection("wishlist")
+                      .doc(user!.email)
+                      .collection("products")
+                      .snapshots(),
+                  builder: ((context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const SizedBox();
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const SizedBox();
+                    } else {
+                      List<QueryDocumentSnapshot<Object?>>
+                          firestoreWishlistData = snapshot.data!.docs;
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 18),
+                        child: Container(
+                          height: 17,
+                          width: 17,
+                          decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 255, 217, 193),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: Text(
+                              firestoreWishlistData.length.toString(),
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 11),
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  }),
+                ),
+              ],
+            ),
+          ),
         ),
         actions: [
           GestureDetector(
@@ -113,12 +121,6 @@ class _HomePageState extends State<HomePage> {
               padding: EdgeInsets.only(left: 20, right: 10),
               child: Icon(Icons.search_rounded),
             ),
-          ),
-          GestureDetector(
-            onTap: () => Get.to(() => ColorView()),
-            child: Padding(
-                padding: EdgeInsets.only(left: 10, right: 10),
-                child: Icon(Icons.color_lens_outlined)),
           ),
           Padding(
             padding: EdgeInsets.only(left: 10, right: 20),
@@ -133,6 +135,52 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection("users")
+                          .where('email', isEqualTo: user!.email)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return Center(
+                              child: Text(
+                            "Loading...",
+                            style: TextStyle(fontWeight: FontWeight.w300),
+                          ));
+                        } else if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                              child: Text(
+                            "Loading...",
+                            style: TextStyle(fontWeight: FontWeight.w300),
+                          ));
+                        } else {
+                          List<QueryDocumentSnapshot<Object?>> fireStoreItems =
+                              snapshot.data!.docs;
+                          final fName = fireStoreItems[0]['name'].split(" ");
+                          return Row(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 10, bottom: 2),
+                                child: Text(
+                                  "GOOD MORNING, ${fName[0].toUpperCase()}",
+                                  maxLines: 2,
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }
+                      },
+                    ),
+                  ),
                   //Image Carsouel
                   StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
@@ -140,10 +188,28 @@ class _HomePageState extends State<HomePage> {
                           .snapshots(),
                       builder: ((context, snapshot) {
                         if (!snapshot.hasData) {
-                          return Center(child: CircularProgressIndicator());
+                          return SizedBox(
+                            height: MediaQuery.of(context).size.height -
+                                kToolbarHeight,
+                            child: Center(
+                              child: Text(
+                                "Loading...",
+                                style: TextStyle(fontWeight: FontWeight.w300),
+                              ),
+                            ),
+                          );
                         } else if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return Center(child: CircularProgressIndicator());
+                          return SizedBox(
+                            height: MediaQuery.of(context).size.height -
+                                kToolbarHeight,
+                            child: Center(
+                              child: Text(
+                                "Loading...",
+                                style: TextStyle(fontWeight: FontWeight.w300),
+                              ),
+                            ),
+                          );
                         } else {
                           List<QueryDocumentSnapshot<Object?>>
                               firestoreBannerImage = snapshot.data!.docs;
@@ -163,10 +229,13 @@ class _HomePageState extends State<HomePage> {
                                     currentIndicatorColor: Colors.white,
                                     padding: EdgeInsets.only(bottom: 10)),
                                 slideBuilder: (index) {
-                                  return CachedNetworkImage(
-                                    imageUrl: firestoreBannerImage[index]
-                                        ["image"],
-                                    fit: BoxFit.cover,
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: CachedNetworkImage(
+                                      imageUrl: firestoreBannerImage[index]
+                                          ["image"],
+                                      fit: BoxFit.cover,
+                                    ),
                                   );
                                 }),
                           );
@@ -191,13 +260,17 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Text(
                               "Ends In: ",
-                              style: TextStyle(fontWeight: FontWeight.w300),
+                              style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 13,
+                              ),
                             ),
                             CountDownText(
                               due: DateTime.parse("2022-08-20 00:00:00"),
                               finishedText: "Ended",
                               showLabel: true,
                               style: TextStyle(
+                                  fontSize: 13,
                                   color: Colors.black,
                                   fontWeight: FontWeight.w300),
                             ),
@@ -232,10 +305,28 @@ class _HomePageState extends State<HomePage> {
                         .snapshots(),
                     builder: (BuildContext context, snapshot) {
                       if (!snapshot.hasData) {
-                        return Center(child: CircularProgressIndicator());
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height -
+                              kToolbarHeight,
+                          child: Center(
+                            child: Text(
+                              "Loading...",
+                              style: TextStyle(fontWeight: FontWeight.w300),
+                            ),
+                          ),
+                        );
                       } else if (snapshot.connectionState ==
                           ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height -
+                              kToolbarHeight,
+                          child: Center(
+                            child: Text(
+                              "Loading...",
+                              style: TextStyle(fontWeight: FontWeight.w300),
+                            ),
+                          ),
+                        );
                       } else {
                         List<QueryDocumentSnapshot<Object?>> firestoreProducts =
                             snapshot.data!.docs;
@@ -320,10 +411,28 @@ class _HomePageState extends State<HomePage> {
                         .snapshots(),
                     builder: (BuildContext context, snapshot) {
                       if (!snapshot.hasData) {
-                        return Center(child: CircularProgressIndicator());
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height -
+                              kToolbarHeight,
+                          child: Center(
+                            child: Text(
+                              "Loading...",
+                              style: TextStyle(fontWeight: FontWeight.w300),
+                            ),
+                          ),
+                        );
                       } else if (snapshot.connectionState ==
                           ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height -
+                              kToolbarHeight,
+                          child: Center(
+                            child: Text(
+                              "Loading...",
+                              style: TextStyle(fontWeight: FontWeight.w300),
+                            ),
+                          ),
+                        );
                       } else {
                         List<QueryDocumentSnapshot<Object?>> firestoreProducts =
                             snapshot.data!.docs;
@@ -416,10 +525,28 @@ class _HomePageState extends State<HomePage> {
                         .snapshots(),
                     builder: (BuildContext context, snapshot) {
                       if (!snapshot.hasData) {
-                        return Center(child: CircularProgressIndicator());
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height -
+                              kToolbarHeight,
+                          child: Center(
+                            child: Text(
+                              "Loading...",
+                              style: TextStyle(fontWeight: FontWeight.w300),
+                            ),
+                          ),
+                        );
                       } else if (snapshot.connectionState ==
                           ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height -
+                              kToolbarHeight,
+                          child: Center(
+                            child: Text(
+                              "Loading...",
+                              style: TextStyle(fontWeight: FontWeight.w300),
+                            ),
+                          ),
+                        );
                       } else {
                         List<QueryDocumentSnapshot<Object?>> firestoreProducts =
                             snapshot.data!.docs;
@@ -542,7 +669,11 @@ class _HomePageState extends State<HomePage> {
                                     height: MediaQuery.of(context).size.height -
                                         kToolbarHeight,
                                     child: Center(
-                                      child: CircularProgressIndicator(),
+                                      child: Text(
+                                        "Loading...",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w300),
+                                      ),
                                     ),
                                   );
                                 } else if (snapshot.connectionState ==
@@ -551,7 +682,11 @@ class _HomePageState extends State<HomePage> {
                                     height: MediaQuery.of(context).size.height -
                                         kToolbarHeight,
                                     child: Center(
-                                      child: CircularProgressIndicator(),
+                                      child: Text(
+                                        "Loading...",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w300),
+                                      ),
                                     ),
                                   );
                                 } else {

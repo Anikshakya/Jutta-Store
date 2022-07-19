@@ -52,10 +52,22 @@ class _ColorViewState extends State<ColorView> {
                     .snapshots(),
                 builder: ((context, snapshot) {
                   if (!snapshot.hasData) {
-                    return const Center(child: CircularProgressIndicator());
+                    return SizedBox(
+                      height:
+                          MediaQuery.of(context).size.height - kToolbarHeight,
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
                   } else if (snapshot.connectionState ==
                       ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
+                    return SizedBox(
+                      height:
+                          MediaQuery.of(context).size.height - kToolbarHeight,
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
                   } else {
                     List<QueryDocumentSnapshot<Object?>> firestoreBannerImage =
                         snapshot.data!.docs;

@@ -107,77 +107,52 @@ class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            backgroundColor: Colors.white,
-            pinned: true,
-            expandedHeight: 200,
-            leading: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    child: const Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Icon(
-                          Icons.arrow_back,
-                          color: Colors.black,
-                          size: 20,
-                        )),
-                  ),
+      appBar: AppBar(
+        title: Text(
+          "ORDER PAGE",
+          style: TextStyle(
+              fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Colors.black,
+        ),
+        leading: Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: const EdgeInsets.only(left: 10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(100),
                 ),
-              ],
-            ),
-            flexibleSpace: FlexibleSpaceBar(
-              background: GestureDetector(
-                onTap: () {
-                  showDialog<String>(
-                    context: context,
-                    builder: (BuildContext context) => GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: InteractiveViewer(
-                        child: AlertDialog(
-                          titlePadding: const EdgeInsets.all(0),
-                          title: CachedNetworkImage(
-                            imageUrl: widget.image,
-                            height: 300,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                child: Stack(
-                  children: [
-                    CachedNetworkImage(
-                      imageUrl: widget.image,
-                      height: MediaQuery.of(context).size.height,
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.cover,
-                    ),
-                    Container(
-                      color: const Color.fromARGB(52, 0, 0, 0),
-                    )
-                  ],
-                ),
+                child: const Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: Colors.black,
+                      size: 22,
+                    )),
               ),
             ),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, index) {
-                return SizedBox(
+          ],
+        ),
+      ),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                CachedNetworkImage(
+                  imageUrl: widget.image,
+                  height: MediaQuery.of(context).size.height / 2.6,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+                SizedBox(
                   height: MediaQuery.of(context).size.height / 1.11,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,7 +173,7 @@ class _OrderPageState extends State<OrderPage> {
                                     widget.brand,
                                     style: const TextStyle(
                                       fontWeight: FontWeight.w400,
-                                      fontSize: 19,
+                                      fontSize: 17,
                                       color: Colors.grey,
                                     ),
                                   ),
@@ -237,12 +212,23 @@ class _OrderPageState extends State<OrderPage> {
                             const SizedBox(
                               height: 10,
                             ),
-                            Text(
-                              "Rs. " + widget.price,
-                              style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w400,
-                                  color: Color.fromARGB(255, 83, 83, 83)),
+                            RichText(
+                              text: TextSpan(
+                                text: "Rs. ",
+                                style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500),
+                                children: [
+                                  TextSpan(
+                                    text: widget.price,
+                                    style: const TextStyle(
+                                        color: Color.fromARGB(255, 51, 51, 51),
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ],
+                              ),
                             ),
                             const Divider(
                               indent: 5,
@@ -597,73 +583,78 @@ class _OrderPageState extends State<OrderPage> {
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size(55, 45),
-                              primary: Colors.black,
-                              onPrimary: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            onPressed: () {
-                              addToCart(context);
-                            },
-                            child: Row(
-                              children: const [
-                                Padding(
-                                  padding: EdgeInsets.only(right: 10),
-                                  child: Icon(
-                                    Icons.shopping_cart_outlined,
-                                    size: 18,
-                                  ),
-                                ),
-                                Text(
-                                  'Add to Cart',
-                                  style: TextStyle(fontSize: 13),
-                                ),
-                              ],
-                            ),
-                          ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size(55, 45),
-                              primary: Colors.black,
-                              onPrimary: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            onPressed: () {},
-                            child: Row(
-                              children: const [
-                                Padding(
-                                  padding: EdgeInsets.only(right: 10),
-                                  child: Icon(
-                                    Icons.attach_money,
-                                    size: 18,
-                                  ),
-                                ),
-                                Text(
-                                  'Check Out',
-                                  style: TextStyle(fontSize: 13),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
                     ],
                   ),
-                );
-              },
-              childCount: 1,
+                )
+              ],
+            ),
+          ),
+          //-----Button
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              color: Colors.white,
+              padding:
+                  EdgeInsets.only(top: 10, bottom: 12, left: 20, right: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(150, 47),
+                      primary: Colors.black,
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
+                      addToCart(context);
+                    },
+                    child: Row(
+                      children: const [
+                        Padding(
+                          padding: EdgeInsets.only(right: 10),
+                          child: Icon(
+                            Icons.shopping_cart_outlined,
+                            size: 18,
+                          ),
+                        ),
+                        Text(
+                          'Add to Cart',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(150, 47),
+                      primary: Colors.black,
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {},
+                    child: Row(
+                      children: const [
+                        Padding(
+                          padding: EdgeInsets.only(right: 10),
+                          child: Icon(
+                            Icons.play_arrow,
+                            size: 18,
+                          ),
+                        ),
+                        Text(
+                          'Buy Now',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

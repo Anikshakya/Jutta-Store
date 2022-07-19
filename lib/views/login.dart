@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jutta_ghar/services/google_sign_in_services.dart';
 import 'package:jutta_ghar/views/bottom_nav.dart';
 import 'package:jutta_ghar/views/forgot_password.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,7 +10,7 @@ import 'package:jutta_ghar/views/sign_up.dart';
 import 'package:jutta_ghar/utils/shapes.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:get/get.dart';
-import 'package:jutta_ghar/utils/utils.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -27,6 +29,42 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool _obscureText = true;
+
+  //Greating Message
+  greetingMessage() {
+    final user = FirebaseAuth.instance.currentUser;
+    StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection("users")
+          .where('email', isEqualTo: user!.email)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Text("No data found!");
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          List<QueryDocumentSnapshot<Object?>> fireStoreItems =
+              snapshot.data!.docs;
+          final fName = fireStoreItems[0]['name'].split(" ");
+          return Row(
+            children: [
+              Text(
+                "Welcome, ${fName[0]}",
+                maxLines: 2,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          );
+        }
+      },
+    );
+  }
 
   @override
   void dispose() {
@@ -398,12 +436,11 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    Get.snackbar(
-                                        "Wait", "Service Currently Unavialable",
-                                        backgroundColor:
-                                            Color.fromARGB(127, 255, 82, 82),
-                                        duration: Duration(seconds: 2),
-                                        snackPosition: SnackPosition.BOTTOM);
+                                    final provider =
+                                        Provider.of<GoogleSignInProvieder>(
+                                            context,
+                                            listen: false);
+                                    provider.googleLogin(context);
                                   },
                                   child: Image.asset(
                                     "images/google.png",
@@ -417,11 +454,13 @@ class _LoginPageState extends State<LoginPage> {
                                 GestureDetector(
                                   onTap: () {
                                     Get.snackbar(
-                                        "Wait", "Service Currently Unavialable",
-                                        backgroundColor:
-                                            Color.fromARGB(127, 255, 82, 82),
-                                        duration: Duration(seconds: 2),
-                                        snackPosition: SnackPosition.BOTTOM);
+                                      "Wait",
+                                      "Service Currently Unavialable",
+                                      backgroundColor:
+                                          Color.fromARGB(127, 255, 82, 82),
+                                      duration: Duration(seconds: 2),
+                                      snackPosition: SnackPosition.BOTTOM,
+                                    );
                                   },
                                   child: Image.asset(
                                     "images/twitter.png",
@@ -462,11 +501,13 @@ class _LoginPageState extends State<LoginPage> {
             password: passwordController.text.trim(),
           )
           .then((value) => Get.snackbar(
-              "Irasshaimase", "Successfully Loggeed In",
+              "Irasshaimase!", "Welcome to Jutta Ghar",
               duration: Duration(seconds: 2)))
           .then((value) => Navigator.pop(context));
     } on FirebaseAuthException catch (e) {
-      Utils.showSnackBar(e.message.toString(), false);
+      Get.snackbar("Error", e.toString(),
+          duration: Duration(seconds: 2),
+          backgroundColor: Color.fromARGB(176, 255, 82, 82));
       Get.back();
     }
     //----Navigator.of(context) not working-----

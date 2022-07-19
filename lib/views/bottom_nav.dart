@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jutta_ghar/views/cart.dart';
+import 'package:jutta_ghar/views/color_view.dart';
 import 'package:jutta_ghar/views/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,6 +27,7 @@ class _BottomNavState extends State<BottomNav> {
     _selectedIndex = widget.index;
     pages = [
       const HomePage(),
+      const ColorView(),
       const CartPage(),
       const SettingsPage(),
     ];
@@ -58,6 +60,8 @@ class _BottomNavState extends State<BottomNav> {
                 Icons.home_outlined,
               ),
               label: 'Home'),
+          const BottomNavigationBarItem(
+              icon: Icon(Icons.color_lens_outlined), label: 'Color Panel'),
           BottomNavigationBarItem(
               icon: Stack(
                 children: [
@@ -102,12 +106,12 @@ class _BottomNavState extends State<BottomNav> {
                   ),
                 ],
               ),
-              label: 'Shop'),
+              label: 'Cart'),
           const BottomNavigationBarItem(
               icon: Icon(
                 Icons.person_outline,
               ),
-              label: 'Profile'),
+              label: 'Accounts'),
         ],
       ),
     );
